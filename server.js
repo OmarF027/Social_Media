@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
+import postRoutes from "./routes/posts.js";
 import { isAuthenticated } from "./middleware/authMiddleware.js";
 
 dotenv.config();
@@ -30,12 +31,18 @@ app.use(
   })
 );
 
-// ROUTE autenticazione
+// ROUTE autenticazione e post
 app.use(authRoutes);
+app.use(postRoutes);
 
-// Homepage protetta
+// Homepage protetta che mostra tutti i post
 app.get("/", isAuthenticated, async (req, res) => {
-  res.render("index", { title: "Home" });
+  const posts = await prisma.post.findMany({
+    include: { author: true },
+    orderBy: { createdAt: "desc" },
+  });
+
+  res.render("index", { title: "Home", posts });
 });
 
 // Avvia il server

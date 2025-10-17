@@ -1,0 +1,12 @@
+<h1>Feed</h1>
+<a href="/posts/create">Crea nuovo post</a>
+<ul>
+  <% posts.forEach(post => { %>
+    <li>
+      <strong><%= post.author.username %></strong>:
+      <%= post.content %> 
+      (<%= new Date(post.createdAt).toLocaleString() %>)
+    </li>
+  <% }) %>
+</ul>
+<a href="/logout">Logout</a>

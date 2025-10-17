@@ -3,9 +3,29 @@
 <head>
   <meta charset="utf-8">
   <title><%= title %></title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; }
+    .post { border: 1px solid #ddd; padding: 10px; margin: 10px 0; border-radius: 5px; }
+    .post-author { font-weight: bold; }
+    .post-time { font-size: 0.8em; color: #666; }
+    a.button { display: inline-block; padding: 5px 10px; margin: 10px 0; background: #007bff; color: white; text-decoration: none; border-radius: 5px; }
+  </style>
 </head>
 <body>
-  <h1>Benvenuto nella tua Social Media App!</h1>
-  <p>Il server Express funziona correttamente ✅</p>
+  <h1>Home</h1>
+  <a href="/posts/create" class="button">Crea nuovo post</a>
+  <a href="/logout" class="button">Logout</a>
+
+  <% if(posts.length === 0) { %>
+    <p>Nessun post ancora.</p>
+  <% } %>
+
+  <% posts.forEach(post => { %>
+    <div class="post">
+      <div class="post-author"><%= post.author.username %></div>
+      <div class="post-content"><%= post.content %></div>
+      <div class="post-time"><%= new Date(post.createdAt).toLocaleString() %></div>
+    </div>
+  <% }) %>
 </body>
 </html>
