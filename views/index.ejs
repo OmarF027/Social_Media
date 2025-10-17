@@ -25,7 +25,11 @@
 
   <% posts.forEach(post => { %>
     <div class="post">
-      <div class="post-author"><%= post.author.username %></div>
+      <!-- Nome autore con link al profilo -->
+      <div class="post-author">
+        <a href="/profile/<%= post.author.id %>"><%= post.author.username %></a>
+      </div>
+
       <div class="post-content"><%= post.content %></div>
       <div class="post-time"><%= new Date(post.createdAt).toLocaleString() %></div>
 

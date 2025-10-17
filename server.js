@@ -8,6 +8,7 @@ import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
 import commentRoutes from "./routes/comments.js";
 import likeRoutes from "./routes/likes.js";
+import profileRoutes from "./routes/profile.js";
 import { isAuthenticated } from "./middleware/authMiddleware.js";
 
 dotenv.config();
@@ -33,11 +34,12 @@ app.use(
   })
 );
 
-// ROUTE autenticazione, post, commenti e likes
+// ROUTE autenticazione, post, commenti, likes e profilo
 app.use(authRoutes);
 app.use(postRoutes);
 app.use(commentRoutes);
 app.use(likeRoutes);
+app.use(profileRoutes);
 
 // Homepage protetta con post, commenti e likes
 app.get("/", isAuthenticated, async (req, res) => {
@@ -45,7 +47,7 @@ app.get("/", isAuthenticated, async (req, res) => {
     include: {
       author: true,
       comments: { include: { author: true } },
-      likes: true
+      likes: true,
     },
     orderBy: { createdAt: "desc" },
   });
