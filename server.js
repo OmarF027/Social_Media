@@ -6,6 +6,8 @@ import path from "path";
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js";
 import postRoutes from "./routes/posts.js";
+import commentRoutes from "./routes/comments.js";
+import likeRoutes from "./routes/likes.js";
 import { isAuthenticated } from "./middleware/authMiddleware.js";
 
 dotenv.config();
@@ -31,18 +33,24 @@ app.use(
   })
 );
 
-// ROUTE autenticazione e post
+// ROUTE autenticazione, post, commenti e likes
 app.use(authRoutes);
 app.use(postRoutes);
+app.use(commentRoutes);
+app.use(likeRoutes);
 
-// Homepage protetta che mostra tutti i post
+// Homepage protetta con post, commenti e likes
 app.get("/", isAuthenticated, async (req, res) => {
   const posts = await prisma.post.findMany({
-    include: { author: true },
+    include: {
+      author: true,
+      comments: { include: { author: true } },
+      likes: true
+    },
     orderBy: { createdAt: "desc" },
   });
 
-  res.render("index", { title: "Home", posts });
+  res.render("index", { title: "Home", posts, userId: req.session.userId });
 });
 
 // Avvia il server

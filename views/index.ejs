@@ -9,6 +9,9 @@
     .post-author { font-weight: bold; }
     .post-time { font-size: 0.8em; color: #666; }
     a.button { display: inline-block; padding: 5px 10px; margin: 10px 0; background: #007bff; color: white; text-decoration: none; border-radius: 5px; }
+    .comment { margin-left: 20px; font-size: 0.9em; }
+    .comment-author { font-weight: bold; }
+    .like-button { margin-right: 10px; }
   </style>
 </head>
 <body>
@@ -25,6 +28,33 @@
       <div class="post-author"><%= post.author.username %></div>
       <div class="post-content"><%= post.content %></div>
       <div class="post-time"><%= new Date(post.createdAt).toLocaleString() %></div>
+
+      <!-- Pulsante Like -->
+      <form action="/likes" method="POST" style="display:inline;">
+        <input type="hidden" name="postId" value="<%= post.id %>">
+        <button type="submit" class="like-button">
+          Like (<%= post.likes.length %>)
+        </button>
+      </form>
+
+      <!-- Form per aggiungere commento -->
+      <form action="/comments" method="POST">
+        <input type="hidden" name="postId" value="<%= post.id %>">
+        <input type="text" name="content" placeholder="Scrivi un commento..." required>
+        <button type="submit">Commenta</button>
+      </form>
+
+      <!-- Lista commenti -->
+      <ul>
+        <% if(post.comments && post.comments.length > 0) { %>
+          <% post.comments.forEach(comment => { %>
+            <li class="comment">
+              <span class="comment-author"><%= comment.author.username %></span>: <%= comment.content %>
+              (<%= new Date(comment.createdAt).toLocaleString() %>)
+            </li>
+          <% }) %>
+        <% } %>
+      </ul>
     </div>
   <% }) %>
 </body>
