@@ -12,6 +12,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@faker-js/faker": "^10.1.0",
     "@prisma/client": "^6.17.1",
     "bcryptjs": "^3.0.2",
     "dotenv": "^17.2.3",
