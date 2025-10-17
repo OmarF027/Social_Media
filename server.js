@@ -4,6 +4,8 @@ import dotenv from "dotenv";
 import { PrismaClient } from "@prisma/client";
 import path from "path";
 import { fileURLToPath } from "url";
+import authRoutes from "./routes/auth.js";
+import { isAuthenticated } from "./middleware/authMiddleware.js";
 
 dotenv.config();
 
@@ -28,8 +30,11 @@ app.use(
   })
 );
 
-// ROUTE di test — per verificare che tutto funzioni
-app.get("/", async (req, res) => {
+// ROUTE autenticazione
+app.use(authRoutes);
+
+// Homepage protetta
+app.get("/", isAuthenticated, async (req, res) => {
   res.render("index", { title: "Home" });
 });
 
